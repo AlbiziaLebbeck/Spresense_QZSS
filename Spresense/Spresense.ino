@@ -87,13 +87,14 @@ void loop() {
   // put your main code here, to run repeatedly:
   /* Check update. */
   if (millis() >= start_time + 15000) {
-    Serial2.print("{\"Lat\":");
+    Serial2.print("{\"SID\":1,\"type\":\"A\"");
+    Serial2.print(",\"Lat\":");
     Serial2.print(NavData.latitude, 6);
     Serial2.print(",\"Lon\":");
     Serial2.print(NavData.longitude, 6);
-    Serial2.print(",\"Satellites\":");
+    Serial2.print(",\"Sats\":");
     Serial2.print(NavData.numSatellites);
-    Serial2.println("}");
+    Serial2.print("}");
     start_time = millis();
   }
   
@@ -109,19 +110,20 @@ void loop() {
     if (handle = Gnss.getDCReport()) {
       NMEA_DcReport_Output(handle);
       data = ((struct cxd56_gnss_dcreport_data_s*)handle)->sf;
-      Serial2.print("{\"Country_ID\":");
+      Serial2.print("{\"SID\":1,\"type\":\"B\"");
+      Serial2.print(",\"CID\":");
       Serial2.print(get_val(32,10));
-      Serial2.print(",\"Event\":");
+      Serial2.print(",\"Evt\":");
       Serial2.print(get_val(46,3));
-      Serial2.print(",\"SubEvent\":");
+      Serial2.print(",\"SEvt\":");
       Serial2.print(get_val(49,4));
-      Serial2.print(",\"Severity\":");
+      Serial2.print(",\"Sev\":");
       Serial2.print(get_val(53,2));
-      Serial2.print(",\"Target_Lat\":");
+      Serial2.print(",\"Lat\":");
       Serial2.print(get_val(85,16)*0.002746624-90);
-      Serial2.print("\"Target_Lon\":");
+      Serial2.print(",\"Lon\":");
       Serial2.print(get_val(101,17)*0.002746624-180);
-      Serial2.println("}");
+      Serial2.print("}");
     }
   }
 }
